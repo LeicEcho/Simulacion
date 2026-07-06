@@ -7,8 +7,7 @@
 
 En el ámbito de la simulación matemática, la generación de números pseudoaleatorios es fundamental para modelar sistemas estocásticos. Para que una secuencia de números pseudoaleatorios $\{U_i\}$ en el intervalo $[0, 1)$ sea estadísticamente válida, debe cumplir rigurosamente con dos propiedades fundamentales:
 
-1. **Uniformidad**: Los números generados deben estar distribuidos de manera uniforme a lo largo del intervalo $(0, 1)$. Esto implica que cualquier subintervalo de igual longitud tiene la misma probabilidad de contener un número de la secuencia. Matemáticamente, la función de densidad de probabilidad de la variable aleatoria $U$ debe ser:
-   $$f(u) = \begin{cases} 1 & \text{si } 0 \le u \le 1 \\ 0 & \text{en otro caso} \end{cases}$$
+1. **Uniformidad**: Los números generados deben estar distribuidos de manera uniforme a lo largo del intervalo $(0, 1)$. Esto implica que cualquier subintervalo de igual longitud tiene la misma probabilidad de contener un número de la secuencia. Matemáticamente, la función de densidad de probabilidad de la variable aleatoria $U$ debe ser: <img src="https://latex.codecogs.com/svg.image?\color{white}f(u)%20=%20\begin{cases}%201%20&%20\text{si%20}%200%20\le%20u%20\le%201%20\\%200%20&%20\text{en%20otro%20caso}%20\end{cases}" title="f(u)" style="background-color: #1A1A1A; padding: 10px; border-radius: 5px;" />
 
 2. **Independencia**: No debe existir correlación, patrón o dependencia entre los números sucesivos de la secuencia. La ocurrencia de un valor no debe influir ni permitir predecir el valor del siguiente número generado. Matemáticamente, para cualquier par de variables aleatorias $U_i$ y $U_j$ (con $i \neq j$):
    $$P(U_i \le u_i, U_j \le u_j) = P(U_i \le u_i) \cdot P(U_j \le u_j)$$
@@ -90,7 +89,7 @@ Evalúa la aleatoriedad secuencial contando las longitudes de rachas crecientes 
 
 * **Secuencia de Tendencia (Bits)**:
   Se genera una secuencia binaria $S_i$ de longitud $N-1$:
-  $$S_i = \begin{cases} 0 & \text{si } U_{i+1} \ge U_i \\ 1 & \text{si } U_{i+1} < U_i \end{cases}$$
+  <img src="https://latex.codecogs.com/svg.image?\color{white}S_i%20=%20\begin{cases}%200%20&%20\text{si%20}%20U_{i+1}%20\ge%20U_i%20\\%201%20&%20\text{si%20}%20U_{i+1}%20<%20U_i%20\end{cases}" title="S_i" style="background-color: #1A1A1A; padding: 10px; border-radius: 5px;" />
 
 * **Frecuencias Esperadas**:
   Las corridas se agrupan en longitudes de 1, 2 y $\ge 3$. La frecuencia esperada teórica para cada longitud de corrida $j$ (para $j < N-1$) viene dada por:
