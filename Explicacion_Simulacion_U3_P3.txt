@@ -1,0 +1,104 @@
+================================================================================
+EXPLICACIÓN DETALLADA: RESOLUCIÓN DE EJERCICIOS DE SIMULACIÓN POR CONVOLUCIÓN
+================================================================================
+
+Este reporte detalla paso a paso la resolución analítica de la Práctica #3 
+Unidad 3, fundamentada en el método de convolución. La convolución consiste en
+obtener una variable aleatoria compleja mediante la suma algebraica de variables
+independientes más simples (sumandos). Cada ejercicio se desglosa según las
+cuatro etapas solicitadas.
+
+--------------------------------------------------------------------------------
+EJERCICIO 1: DISTRIBUCIÓN ERLANG (SUMA DE EXPONENCIALES)
+--------------------------------------------------------------------------------
+Contexto: Simulación de un proceso de k = 2 etapas independientes, donde cada 
+          etapa posee una distribución exponencial con tasa lambda = 0.4 por minuto.
+          X ~ Erlang(k=2, lambda=0.4).
+Números uniformes asignados: u1 = 0.35, u2 = 0.62.
+
+(a) Identificación de sumandos Yi y su distribución:
+    Una variable Erlang(k, lambda) se define estadísticamente como la convolución
+    de 'k' variables aleatorias independientes e idénticamente distribuidas (i.i.d.)
+    que siguen una distribución exponencial con tasa 'lambda'.
+    Por tanto, los sumandos son:
+    - Y1 ~ Exponencial(lambda = 0.4)
+    - Y2 ~ Exponencial(lambda = 0.4)
+    Donde la ecuación para generar cada sumando individual es: y_i = -(1 / lambda) * ln(u_i)
+
+(b) Generación de cada sumando con el número uniforme indicado:
+    - Para la etapa 1 (u1 = 0.35):
+      y1 = -(1 / 0.4) * ln(0.35)
+      y1 = -2.5 * (-1.04982212)
+      y1 = 2.624555... -> Redondeado a 4 decimales: 2.6246
+      
+    - Para la etapa 2 (u2 = 0.62):
+      y2 = -(1 / 0.4) * ln(0.62)
+      y2 = -2.5 * (-0.47803581)
+      y2 = 1.195089... -> Redondeado a 4 decimales: 1.1951
+
+(c) Suma para obtener la observación final (Convolución):
+    x = y1 + y2
+    x = 2.624555 + 1.195089 = 3.819644...
+    
+    Resultado: La observación simulada es x = 3.8196 minutos.
+
+--------------------------------------------------------------------------------
+EJERCICIO 2: DISTRIBUCIÓN BINOMIAL (SUMA DE BERNOULLI)
+--------------------------------------------------------------------------------
+Contexto: Inspección de n = 4 artículos independientes con probabilidad de defecto
+          p = 0.5. X ~ Binomial(n=4, p=0.5).
+Regla de asignación: Éxito (artículo defectuoso) si u_i > 1 - p.
+Números uniformes asignados: u1 = 0.66, u2 = 0.28, u3 = 0.91, u4 = 0.04.
+
+(a) Identificación de sumandos Yi y su distribución:
+    Una distribución Binomial(n, p) representa la suma o convolución de 'n' ensayos
+    independientes de Bernoulli con la misma probabilidad de éxito 'p'.
+    Por lo tanto, los sumandos son:
+    - Y1, Y2, Y3, Y4 ~ Bernoulli(p = 0.5)
+    Donde cada Y_i toma el valor de 1 (Éxito) o 0 (Fracaso).
+    Umbral de decisión: 1 - p = 1 - 0.5 = 0.5. Si u_i > 0.5 es Éxito (1).
+
+(b) Generación de cada sumando con el número uniforme indicado:
+    - Para Y1 (u1 = 0.66): ¿0.66 > 0.5? Sí. Cumple la condición de éxito -> y1 = 1
+    - Para Y2 (u2 = 0.28): ¿0.28 > 0.5? No. Cumple la condición de fracaso -> y2 = 0
+    - Para Y3 (u3 = 0.91): ¿0.91 > 0.5? Sí. Cumple la condición de éxito -> y3 = 1
+    - Para Y4 (u4 = 0.04): ¿0.04 > 0.5? No. Cumple la condición de fracaso -> y4 = 0
+
+(c) Suma para obtener la observación final (Convolución):
+    x = y1 + y2 + y3 + y4
+    x = 1 + 0 + 1 + 0 = 2
+    
+    Resultado: El número simulado de artículos defectuosos es x = 2.0000.
+
+--------------------------------------------------------------------------------
+EJERCICIO 3: DISTRIBUCIÓN TRIANGULAR (SUMA DE DOS UNIFORMES)
+--------------------------------------------------------------------------------
+Contexto: Generar un valor de una distribución triangular en el rango (0, 2) con 
+          moda (pico) en 1.
+Fórmula establecida por el problema: t = u1 + u2.
+Números uniformes asignados: u1 = 0.45, u2 = 0.15.
+
+(a) Identificación de sumandos Yi y su distribución:
+    Por teoría de probabilidad, la convolución (suma) de dos variables aleatorias
+    independientes con distribución Uniforme estándar U(0, 1) da como resultado 
+    exacto una distribución Triangular simétrica en el intervalo (0, 2) con moda 
+    exactamente en el punto medio, es decir, c = 1.
+    Por lo tanto, los sumandos son:
+    - Y1 ~ Uniforme(0, 1) -> y1 = u1
+    - Y2 ~ Uniforme(0, 1) -> y2 = u2
+
+(b) Generación de cada sumando con el número uniforme indicado:
+    Al tratarse de uniformes estándar U(0, 1), el valor mapeado de la variable es
+    exactamente igual al número aleatorio u_i ingresado:
+    - y1 = u1 = 0.4500
+    - y2 = u2 = 0.1500
+
+(c) Suma para obtener la observación final (Convolución):
+    t = y1 + y2
+    t = 0.4500 + 0.1500 = 0.6000
+    
+    Resultado: El valor simulado de la variable triangular es t = 0.6000.
+
+================================================================================
+FIN DEL REPORTE
+================================================================================

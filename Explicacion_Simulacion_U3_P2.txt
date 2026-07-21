@@ -1,0 +1,143 @@
+================================================================================
+EXPLICACIÓN DETALLADA: RESOLUCIÓN DE EJERCICIOS DE SIMULACIÓN (UNIDAD 3)
+================================================================================
+
+Este reporte detalla el método analítico empleado para la resolución de los
+ejercicios mediante el método de la transformada inversa, resolviendo cuatro 
+pasos: (a) Plantear la FDA, (b) Igualar a u, (c) Despejar x,
+y (d) Evaluar numéricamente con cuatro cifras decimales.
+
+--------------------------------------------------------------------------------
+EJERCICIO 1: DISTRIBUCIÓN UNIFORME GENERAL
+--------------------------------------------------------------------------------
+Contexto: Se modela la duración de una llamada telefónica X ~ U(3, 15) minutos.
+Valor a evaluar: u = 0.62.
+
+(a) Función de Distribución Acumulada (FDA):
+    Para una variable aleatoria continua con distribución uniforme en el intervalo
+    [a, b], la FDA está definida por la fórmula general:
+    F_X(x) = (x - a) / (b - a)
+    
+    Sustituyendo los parámetros locales (a = 3, b = 15):
+    F_X(x) = (x - 3) / (15 - 3)
+    F_X(x) = (x - 3) / 12
+
+(b) Igualación a la variable uniforme 'u':
+    Se iguala la FDA a un número pseudoaleatorio 'u' distribuido uniformemente 
+    entre 0 y 1 (u ~ U(0, 1)):
+    (x - 3) / 12 = u
+
+(c) Despeje de la fórmula generadora (Transformada Inversa):
+    Para obtener la ecuación que genera los valores de la simulación, aislamos 'x':
+    x - 3 = 12 * u
+    x = 3 + 12u
+    
+    Por lo tanto, la ecuación generadora es: X = F_X^-1(u) = 3 + 12u
+
+(d) Evaluación con el número uniforme indicado:
+    Sustituyendo u = 0.62 en la fórmula generadora obtenida:
+    x = 3 + 12 * (0.62)
+    x = 3 + 7.44
+    x = 10.4400
+    
+    Resultado: La duración simulada de la llamada es de 10.4400 minutos.
+
+--------------------------------------------------------------------------------
+EJERCICIO 2: DISTRIBUCIÓN EXPONENCIAL
+--------------------------------------------------------------------------------
+Contexto: El tiempo entre arribos sigue una distribución exponencial con tasa
+          lambda = 0.25 clientes por minuto.
+Valor a evaluar: u = 0.40.
+
+(a) Función de Distribución Acumulada (FDA):
+    La FDA de una distribución exponencial en términos de su parámetro de tasa 
+    (lambda) se define mediante la ecuación:
+    F_X(x) = 1 - e^(-lambda * x)
+    
+    Sustituyendo la tasa dada (lambda = 0.25):
+    F_X(x) = 1 - e^(-0.25 * x)
+
+(b) Igualación a la variable uniforme 'u':
+    Planteamos la equivalencia probabilística para la inversión:
+    1 - e^(-0.25 * x) = u
+
+(c) Despeje de la fórmula generadora (Transformada Inversa):
+    Realizamos los pasos algebraicos para aislar la variable independiente 'x':
+    1 - u = e^(-0.25 * x)
+    
+    Aplicando el logaritmo natural (ln) a ambos lados para eliminar la exponencial:
+    ln(1 - u) = -0.25 * x
+    
+    Multiplicando por -1 e invirtiendo la constante:
+    x = -ln(1 - u) / 0.25
+    
+    Por lo tanto, la ecuación generadora matemática exacta es: x = -ln(1 - u) / 0.25
+    *(Nota de simulación: Dado que (1 - u) tiene exactamente la misma distribución 
+     uniforme que 'u' en el intervalo [0, 1], computacionalmente suele simplificarse 
+     como x = -ln(u) / lambda, pero analíticamente el despeje estricto conserva el término 1 - u).
+
+(d) Evaluación con el número uniforme indicado:
+    Sustituyendo u = 0.40 en el despeje matemático analítico riguroso:
+    x = -ln(1 - 0.40) / 0.25
+    x = -ln(0.60) / 0.25
+    x = -(-0.5108256) / 0.25
+    x = 0.5108256 / 0.25
+    x = 2.043302...
+    
+    Redondeando a cuatro decimales:
+    x = 2.0433
+    
+    Resultado: El tiempo simulado entre llegadas es de 2.0433 minutos.
+
+--------------------------------------------------------------------------------
+EJERCICIO 3: DADO CARGADO (DISTRIBUCIÓN DISCRETA FENÓMENO PASO A PASO)
+--------------------------------------------------------------------------------
+Contexto: Variable discreta que representa las caras de un dado con probabilidades
+          asimétricas preestablecidas.
+Valores a evaluar: u = 0.08, u = 0.33, u = 0.72, u = 0.95.
+
+Regla de Asignación de la Transformada Inversa Discreta:
+Para variables discretas, la FDA toma la forma de una función escalonada mediante la
+acumulación de probabilidades puntuales (F_X(x) = P(X <= x)). El método de asignación
+determina que se debe seleccionar el menor valor de 'x' que cumpla con la condición:
+F_X(x) >= u.
+
+Tabla de Distribución Acumulada de Referencia:
+ x | P(X = x) | F_X(x) [Intervalo de asignación para 'u']
+---+----------+------------------------------------------
+ 1 |   0.10   | 0.10   [0.00 < u <= 0.10]
+ 2 |   0.15   | 0.25   [0.10 < u <= 0.25]
+ 3 |   0.15   | 0.40   [0.25 < u <= 0.40]
+ 4 |   0.20   | 0.60   [0.40 < u <= 0.60]
+ 5 |   0.20   | 0.80   [0.60 < u <= 0.80]
+ 6 |   0.20   | 1.00   [0.80 < u <= 1.00]
+
+Evaluación individual paso a paso:
+
+1. Para u = 0.08:
+   Evaluamos de forma secuencial en orden ascendente:
+   ¿F_X(1) >= 0.08? -> 0.10 >= 0.08. La condición se cumple de inmediato.
+   Resultado: El valor del dado generado es 1.
+
+2. Para u = 0.33:
+   ¿F_X(1) >= 0.33? -> 0.10 >= 0.33 (Falso, continuar)
+   ¿F_X(2) >= 0.33? -> 0.25 >= 0.33 (Falso, continuar)
+   ¿F_X(3) >= 0.33? -> 0.40 >= 0.33 (Verdadero, se detiene la búsqueda)
+   El menor valor de x que supera o iguala a 0.33 es 3.
+   Resultado: El valor del dado generado es 3.
+
+3. Para u = 0.72:
+   ¿F_X(1) a F_X(4) no cumplen ya que F_X(4) = 0.60, el cual es menor que 0.72.
+   Evaluamos el siguiente nivel:
+   ¿F_X(5) >= 0.72? -> 0.80 >= 0.72 (Verdadero, cumple la condición).
+   Resultado: El valor del dado generado es 5.
+
+4. Para u = 0.95:
+   Las acumuladas de 1 a 5 llegan hasta 0.80, lo cual es inferior a 0.95.
+   Evaluamos el último nivel:
+   ¿F_X(6) >= 0.95? -> 1.00 >= 0.95 (Verdadero).
+   Resultado: El valor del dado generado es 6.
+
+================================================================================
+FIN DEL REPORTE
+================================================================================

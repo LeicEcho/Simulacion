@@ -1,0 +1,149 @@
+================================================================================
+  EXPLICACIÓN DETALLADA DE LA TRILOGÍA DE ARCHIVOS SOBRE EL MÉTODO MONTECARLO
+================================================================================
+
+Este documento proporciona una explicación exhaustiva y estructurada de la trilogía 
+de cuadernos interactivos (Jupyter Notebooks, .ipynb) que componen el estudio, 
+simulación y aplicación práctica del Método de Montecarlo en Python.
+
+La trilogía está diseñada de manera incremental: parte desde los cimientos históricos, 
+teóricos y matemáticos del método, y avanza hacia dos casos de estudio industriales 
+de optimización de toma de decisiones bajo condiciones severas de incertidumbre 
+(optimización de producción y control de inventarios).
+
+--------------------------------------------------------------------------------
+1. CUADERNO PRINCIPAL: "Metodo Montecarlo.ipynb" (Fundamentos y Teoría)
+--------------------------------------------------------------------------------
+
+Este cuaderno se enfoca exclusivamente en la revisión conceptual, el desarrollo 
+matemático y la fundamentación formal del Método de Montecarlo.
+
+* Orígenes Históricos:
+  - Surgió formalmente en la década de 1940 en el Laboratorio Nacional de Los Álamos 
+    (Proyecto Manhattan) de la mano de los científicos Stanislaw Ulam, John von Neumann 
+    y Nicholas Metropolis.
+  - La idea nació cuando Ulam intentaba estimar la probabilidad de ganar en un juego 
+    de solitario. Al notar la imposibilidad de resolverlo analíticamente por análisis 
+    combinatorio, ideó simular computacionalmente 100 partidas y evaluar la tasa de 
+    éxito.
+  - Von Neumann adaptó el método al cálculo de la difusión y comportamiento de neutrones, 
+    un problema crítico donde los experimentos reales eran sumamente costosos y peligrosos.
+  - Metropolis le dio el nombre en clave "Montecarlo" por el Casino de Montecarlo en 
+    Mónaco, dada la naturaleza puramente probabilística y aleatoria del método.
+
+* Fundamentos Matemáticos:
+  - Ley de los Grandes Números (LGN): Garantiza matemáticamente que el promedio de los 
+    resultados simulados tiende al valor esperado (media poblacional) a medida que el 
+    número de simulaciones (N) tiende a infinito. Define la convergencia probabilística 
+    (Ley Débil) y la convergencia casi segura (Ley Fuerte).
+  - Integración por Montecarlo: Sustituye integrales complejas de dimensiones altas por 
+    el promedio de la evaluación de una función f(x) sobre variables aleatorias uniformes. 
+    Es la alternativa favorita para resolver la "maldición de la dimensionalidad".
+  - Error y Convergencia: Según el Teorema del Límite Central (TLC), la desviación estándar 
+    del error decrece a una tasa de O(N^-1/2). Esta tasa de convergencia es independiente 
+    de las dimensiones del problema.
+
+* Generación de Números Pseudoaleatorios (PRNG):
+  - Las computadoras no producen aleatoriedad real, sino secuencias matemáticas 
+    deterministas de números pseudoaleatorios.
+  - Generador Congruencial Lineal (LCG): X_{n+1} = (a * X_n + c) mod m. Algoritmo clásico 
+    donde una semilla inicial (seed) determina la secuencia.
+  - Método de la Transformada Inversa: Permite transformar una distribución uniforme 
+    U(0,1) en variables de otras distribuciones integrando y revirtiendo su función 
+    acumulada (CDF), como la distribución exponencial: X = -1/lambda * ln(U).
+  - Método de Box-Muller: Genera pares de variables normales estándar independientes 
+    (Z0, Z1) mediante transformaciones trigonométricas y logarítmicas de dos variables 
+    uniformes independientes (U1, U2).
+
+* Áreas de Aplicación Industrial:
+  - Finanzas y Banca: Valoración de opciones exóticas, simulación del Movimiento Browniano 
+    Geométrico y cálculo del Valor en Riesgo (VaR).
+  - Logística y Transporte: Simulación de cadenas de suministro y teoría de colas.
+  - Ciencias e Ingeniería: Simulación de blindajes contra radiación nuclear y confiabilidad 
+    de estructuras bajo cargas estocásticas.
+  - Gestión de Proyectos: Modelos PERT/CPM para estimar plazos y costos de tareas.
+
+--------------------------------------------------------------------------------
+2. CASO A: "Metodo Montecarlo - Caso A - Panaderia.ipynb" (Optimización de Producción)
+--------------------------------------------------------------------------------
+
+Este cuaderno constituye el primer caso práctico de aplicación del método. Resuelve el 
+problema clásico de optimizar la producción diaria de un producto perecedero para 
+maximizar el beneficio esperado ante una demanda estocástica.
+
+* Planteamiento del Problema (Panadería "El Retorno"):
+  - Se debe decidir el número óptimo de panes (B) que se deben hornear por la mañana.
+  - Costo de producción (Cp): $1.20 USD por pan.
+  - Precio de venta fresco (Pv): $3.00 USD por pan.
+  - Liquidación ("pan frío") (Ps): $0.50 USD por pan sobrante.
+  - Costo de escasez (Ce): $0.80 USD por pan faltante (insatisfacción del cliente).
+
+* Modelado de Incertidumbre:
+  - Clientes por día (C): Distribución de Poisson con media lambda = 80 clientes/día.
+  - Demanda de cada cliente (Di): Distribución empírica: 1 pan (40%), 2 panes (30%), 
+    3 panes (20%), 4 panes (10%).
+  - Demanda diaria total (D_total): Sumatoria de la demanda individual de los C clientes.
+
+* Estructura Matemática del Modelo Financiero:
+  - Beneficio Diario (Y) = (Vendidos Frescos * Pv) + (Excedentes * Ps) - (Horneados * Cp) - (Faltantes * Ce).
+  - Horneados = B.
+  - Vendidos Frescos = min(D_total, B).
+  - Excedentes = max(0, B - D_total).
+  - Faltantes = max(0, D_total - B).
+
+* Resultados de la Simulación (5,000 días de operación):
+  - Demanda media diaria simulada: 160.02 panes.
+  - Cantidad óptima de horneado (B*): 176 panes diarios (mayor que la demanda promedio 
+    para mitigar el costo de escasez y pérdida de ventas).
+  - Beneficio diario promedio esperado: $268.63 USD.
+
+--------------------------------------------------------------------------------
+3. CASO B: "Metodo Montecarlo - Caso B - Inventario.ipynb" (Optimización de Política Q,R)
+--------------------------------------------------------------------------------
+
+Este cuaderno representa un problema de simulación dinámica más avanzado y realista: 
+la optimización conjunta de una política de inventarios de revisión continua (Q, R) 
+para minimizar el costo promedio anual en una comercializadora tecnológica.
+
+* Planteamiento del Problema:
+  - R (Punto de Reorden): Nivel de inventario disponible ante el cual se debe emitir un 
+    pedido de reabastecimiento.
+  - Q (Cantidad de Pedido): Lote estándar que se solicita al proveedor en cada orden.
+  - Objetivo: Encontrar la combinación óptima (Q*, R*) que minimice los costos totales 
+    anuales simulados.
+
+* Estructura de Costos del Sistema:
+  - Costo fijo por emitir un pedido (Co): $100.00 USD por orden.
+  - Costo diario de almacenamiento (Ch): $0.20 USD por unidad física en stock al final del día.
+  - Costo de escasez/venta perdida (Cs): $5.00 USD por unidad no satisfecha.
+
+* Modelado de Incertidumbre:
+  - Demanda diaria (Dt): Distribución de Poisson con media lambda = 15 unidades/día.
+  - Tiempo de entrega (Lead Time, L): Variable aleatoria discreta (1 día [20%], 2 días [50%], 
+    3 días [30%]).
+
+* Lógica Operacional Diaria (Simulada Día a Día para un año de 365 días):
+  1. Si un pedido en tránsito llega hoy, se suma al inventario físico.
+  2. Se consume el stock para cubrir la demanda diaria simulada. Las unidades no cubiertas 
+     se cuentan como ventas perdidas (Cs).
+  3. Se evalúa el inventario disponible = inventario físico + pedidos en tránsito.
+  4. Si disponible <= R y no hay pedidos activos en tránsito, se emite una orden de 
+     tamaño Q, se paga Co, y se programa la fecha de recepción en (t + L).
+  5. Se acumulan los costos diarios de posesión y escasez.
+
+* Simulación y Optimización (Grid Search con 500 réplicas anuales):
+  - Se simula cada política (Q, R) para múltiples combinaciones (Q de 100 a 200 y R de 10 a 50).
+  - Punto de Reorden óptimo (R*): 30 unidades.
+  - Cantidad de Pedido óptima (Q*): 130 unidades.
+  - Costo promedio anual mínimo alcanzado: $9,418.32 USD.
+
+--------------------------------------------------------------------------------
+4. TECNOLOGÍAS UTILIZADAS EN LA TRILOGÍA
+--------------------------------------------------------------------------------
+
+- Python 3 como lenguaje de programación central.
+- Jupyter Notebooks como entorno de desarrollo interactivo.
+- NumPy para cálculo vectorial y generación de números pseudoaleatorios (Poisson, Choice).
+- Pandas para estructurar los datos del registro diario de la simulación de inventarios.
+- Matplotlib y Seaborn para la graficación de distribuciones de probabilidad, análisis 
+  de convergencia y mapas de calor (costos/beneficios) que sustentan visualmente las decisiones.
